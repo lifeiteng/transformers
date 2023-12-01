@@ -32,7 +32,7 @@ from ...activations import ACT2FN
 from ...modeling_attn_mask_utils import AttentionMaskConverter, _prepare_4d_causal_attention_mask
 from ...modeling_outputs import BaseModelOutputWithPast, CausalLMOutputWithPast, SequenceClassifierOutputWithPast
 from ...modeling_utils import PreTrainedModel
-from ...pytorch_utils import ALL_LAYERNORM_LAYERS, is_torch_greater_or_equal_than_1_13
+from ...pytorch_utils import ALL_LAYERNORM_LAYERS, is_torch_greater_or_equal_than_1_13, is_torch_greater_or_equal_than_2_0
 from ...utils import (
     add_start_docstrings,
     add_start_docstrings_to_model_forward,
@@ -392,7 +392,7 @@ class LlamaAttention(nn.Module):
         key_states = repeat_kv(key_states, self.num_key_value_groups)
         value_states = repeat_kv(value_states, self.num_key_value_groups)
 
-        if True:
+        if is_torch_greater_or_equal_than_2_0:
             # adjust dropout probability
             dropout_p = self.attention_dropout if self.training else 0.0
             # (N, nh, L, S)
