@@ -289,7 +289,7 @@ class LlamaAttention(nn.Module):
         self.num_key_value_groups = self.num_heads // self.num_key_value_heads
         self.max_position_embeddings = config.max_position_embeddings
         self.rope_theta = config.rope_theta
-        self.is_causal = True
+        self.is_causal = config.is_causal
 
         if (self.head_dim * self.num_heads) != self.hidden_size:
             raise ValueError(
@@ -401,7 +401,7 @@ class LlamaAttention(nn.Module):
                                                          value_states,
                                                          attention_mask,
                                                          dropout_p,
-                                                         is_causal=False)
+                                                         is_causal=self.is_causal)
             attn_weights = None
         else:
             attn_weights = torch.matmul(query_states, key_states.transpose(2, 3)) / math.sqrt(self.head_dim)

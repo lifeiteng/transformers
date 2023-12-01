@@ -97,6 +97,8 @@ class LlamaConfig(PretrainedConfig):
             Whether to use a bias in the query, key, value and output projection layers during self-attention.
         attention_dropout (`float`, *optional*, defaults to 0.0):
             The dropout ratio for the attention probabilities.
+        is_causal (`bool`, defaults to `True`, *optional*, defaults to `True`):
+            Whether to set is_causal=True when compute the the attention probabilities.
 
     ```python
     >>> from transformers import LlamaModel, LlamaConfig
@@ -136,6 +138,7 @@ class LlamaConfig(PretrainedConfig):
         rope_scaling=None,
         attention_bias=False,
         attention_dropout=0.0,
+        is_causal=True,
         **kwargs,
     ):
         self.vocab_size = vocab_size
@@ -160,6 +163,7 @@ class LlamaConfig(PretrainedConfig):
         self._rope_scaling_validation()
         self.attention_bias = attention_bias
         self.attention_dropout = attention_dropout
+        self.is_causal = is_causal
 
         super().__init__(
             pad_token_id=pad_token_id,
