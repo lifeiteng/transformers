@@ -2128,9 +2128,6 @@ class BartForCausalLM(BartPreTrainedModel):
         self, input_ids, past_key_values=None, attention_mask=None, use_cache=None, **kwargs
     ):
         # if model is used as a decoder in encoder-decoder model, the decoder attention mask is created on the fly
-        if attention_mask is None:
-            attention_mask = input_ids.new_ones(input_ids.shape)
-
         if past_key_values:
             past_length = past_key_values[0][0].shape[2]
 
