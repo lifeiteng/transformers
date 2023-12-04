@@ -898,7 +898,7 @@ class LlamaModel(LlamaPreTrainedModel):
             attention_mask = attention_mask if (attention_mask is not None and 0 in attention_mask) else None
         else:
             # 4d mask is passed through the layers
-            if attention_mask.ndim == 4:  # carefully prepared mask by user
+            if attention_mask is not None and attention_mask.ndim == 4:  # carefully prepared mask by user
                 if not torch.is_floating_point(attention_mask):
                     raise ValueError(
                         f"4D attention_mask should be floating tensor"
