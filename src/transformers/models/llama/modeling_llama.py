@@ -1049,12 +1049,18 @@ class LlamaModel(LlamaPreTrainedModel):
         elif self._use_sdpa and not output_attentions:
             # output_attentions=True can not be supported when using SDPA, and we fall back on
             # the manual implementation that requires a 4D causal mask in all cases.
-            attention_mask = _prepare_4d_causal_attention_mask_for_sdpa(
-                attention_mask,
-                (batch_size, seq_length),
-                inputs_embeds,
-                past_key_values_length,
-            )
+            if attention_mask is not None and attention_mask.ndim == 4:  # carefully prepared mask by user
+                if not torch.is_floating_point(attention_mask):
+                    raise ValueError(
+                        f"4D attention_mask should be floating tensor"
+                    )
+            else:
+                attention_mask = _prepare_4d_causal_attention_mask_for_sdpa(
+                    attention_mask,
+                    (batch_size, seq_length),
+                    inputs_embeds,
+                    past_key_values_length,
+                )
         else:
             # 4d mask is passed through the layers
             if attention_mask is not None and attention_mask.ndim == 4:  # carefully prepared mask by user
